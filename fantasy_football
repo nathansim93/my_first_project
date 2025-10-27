@@ -1,22 +1,19 @@
-# These are imports — tools we need
-import requests           # lets Python talk to websites and get data
-import pandas as pd       # helps organize data into tables
 
-# Define a function (a reusable block of code)
+import requests          
+import pandas as pd       
+
 def get_nfl_data():
-    # This is the website where we’ll get NFL scores
+    # website to get NFL scores:
     url = "https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard"
 
-    # "requests.get()" goes to that website and gets the data
     response = requests.get(url)
 
-    # ".json()" converts the data from text to Python dictionary format
     data = response.json()
 
     # From that big blob of data, we only care about the 'events' part
     games = data['events']
 
-    # We’ll store the results here
+    # store results
     rows = []
 
     # Loop through each game in the list
@@ -29,15 +26,8 @@ def get_nfl_data():
         }
         rows.append(row)
 
-    # Convert the rows into a table (DataFrame)
     df = pd.DataFrame(rows)
 
-    # Save it into a CSV file inside the "data" folder
     df.to_csv('data/nfl_scores.csv', index=False)
 
-    # Show the first few rows so we can see it worked
     print(df.head())
-
-# This means "run the function" if we start this file directly
-if __name__ == "__main__":
-    get_nfl_data()
